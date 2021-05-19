@@ -1,0 +1,4 @@
+/* global $ */
+$(() => {
+  const fetchCountries = async () => {};
+});
