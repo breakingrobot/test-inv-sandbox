@@ -29,6 +29,7 @@ const fetchCountries = async (fields = []) => {
 };
 
 $(async () => {
+  $(".toast").toast();
   const countriesList = await fetchCountries();
 
   const findCountryByCode = (code = "") =>
@@ -94,7 +95,7 @@ $(async () => {
   };
 
   const renderCountryContent = (country) => {
-    const $content = createCountryContent(country);
+    const $content = country ? createCountryContent(country) : "";
     const $previousContent = $("#country-main");
 
     $previousContent.html($content);
@@ -124,15 +125,16 @@ $(async () => {
     renderCountryContent(country);
   };
 
-  const renderCountryList = (countries) =>
-    countries.forEach((country) => {
+  const createCountryList = (countries) => {
+    const hasCountries = countries.length > 0;
+
+    return countries.map((country) => {
       const { name = "", alpha3Code = "" } = country;
       const { alpha3Code: firstAlphaCode = "" } = countries[0];
 
       const isFirstCountry = firstAlphaCode === alpha3Code;
 
       const $divTemplate = $("#country-template").html();
-      const $countriesList = $("#countries-list");
 
       const $element = $($divTemplate).clone();
       const $countryCode = $("<span>")
@@ -144,7 +146,7 @@ $(async () => {
       $element.attr("data-code", alpha3Code);
       $element.click(onClickCountry);
 
-      if (isFirstCountry) {
+      if (isFirstCountry && hasCountries) {
         $element.addClass("active");
 
         const $countryElement = createCountryContent(country);
@@ -153,8 +155,44 @@ $(async () => {
         $element.append($countryElement);
       }
 
-      $countriesList.append($element);
+      return $element;
     });
+  };
+
+  const renderCountryList = (countries) => {
+    const elements = createCountryList(countries);
+    const $countriesList = $("#countries-list");
+
+    $countriesList.html(elements);
+  };
+
+  const onSearch = (e) => {
+    e.preventDefault();
+
+    const $searchValue = $("#country-search").val();
+    const regex = new RegExp(`\\b${$searchValue}.*\\b`, "gi");
+    console.warn(regex);
+    const filteredCountries = countriesList.filter(
+      ({ name = "", alpha3Code = "" }) => {
+        return regex.test(name) || regex.test(alpha3Code);
+      }
+    );
+
+    if (filteredCountries.length === 0) {
+      const $toast = $("#search-toast");
+      $toast
+        .find(".toast-body")
+        .html(`Aucun pays ne correspond à votre recherche !`);
+
+      return $toast.toast("show");
+    }
+
+    renderCountryList(filteredCountries);
+    renderCountryContent(filteredCountries[0]);
+  };
+
+  $("#search-form").submit(onSearch);
+  $("#search-submit").click(onSearch);
 
   renderCountryList(countriesList);
   renderCountryContent(countriesList[0]);

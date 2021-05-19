@@ -30,20 +30,32 @@
   <body>
     <header class="py-3 mb-3 border-bottom">
       <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="d-flex">
   
-          <form class="col mb-3 mb-lg-0 me-lg-3">
-            <input type="search" class="form-control form-control-dark" placeholder="Rechercher un pays..." aria-label="Search">
+          <form class="p-2 flex-grow-1" id="search-form">
+            <input type="search" class="form-control form-control-dark" placeholder="Rechercher un pays..." aria-label="Search" id="country-search">
           </form>
   
-          <div class="text-end">
-            <button type="button" class="btn btn-warning">Recherche</button>
+          <div class="p-2 d-none d-md-block">
+            <button type="button" class="btn btn-warning" id="search-submit">Recherche</button>
           </div>
         </div>
       </div>
       </div>
     </header>
 
+    <div class="toast-container position-absolute p-3" style="top: 50; right: 0;">
+      <div class="toast" id="search-toast">
+        <div class="toast-header">
+          <strong class="me-auto">Recherche</strong>
+        </div>
+        <div class="toast-body">
+          Hello, world! This is a toast message.
+        </div>
+      </div>
+    </div>
+      
+    
     <div class="container-fluid pb-3">
       <div class="row justify-content-center">
         <div class="col col-lg-4">
