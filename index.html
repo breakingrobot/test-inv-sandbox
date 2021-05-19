@@ -41,18 +41,16 @@
 
     <div class="container-fluid pb-3">
       <div class="row justify-content-md-center gap-2">
-        <div class="col col-lg-4">
-          <div class="bg-light border rounded-3 mb-2 px-2">
-            <span class="fw-light fs-6">Code</span>
-            <p class="fs-3">Pays</h2>
-          </div>
-        </div>
+        <div class="col col-lg-4" id="countries-list"></div>
         <div class="col col-lg-6">
           <div class="bg-light border rounded-3 px-2">test</div>
         </div>
       </div>
     </div>
 
+    <script id="country-template" type="text/x-custom-template">
+      <div class="bg-light border rounded-3 mb-2 px-2"></div>
+    </script>
     <script src="/index.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
