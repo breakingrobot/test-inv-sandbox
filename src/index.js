@@ -34,7 +34,7 @@ $(async () => {
   const findCountryByCode = (code = "") =>
     countriesList.find(({ alpha3Code }) => code === alpha3Code);
 
-  const renderCountryContent = (country) => {
+  const createCountryContent = (country) => {
     const {
       flag = "",
       nativeName = "",
@@ -90,9 +90,14 @@ $(async () => {
 
     $content.find("#borders").html(`<ul>${formattedBorders}</ul>`);
 
-    const $previousContent = $("#country-content");
+    return $content;
+  };
 
-    $previousContent.replaceWith($content);
+  const renderCountryContent = (country) => {
+    const $content = createCountryContent(country);
+    const $previousContent = $("#country-main");
+
+    $previousContent.html($content);
   };
 
   const onClickCountry = (e) => {
@@ -100,13 +105,21 @@ $(async () => {
 
     const $countriesList = $("#countries-list");
 
-    $countriesList.find(".active").removeClass("active");
+    const $activeCountry = $countriesList.find(".active");
 
-    const element = $(currentTarget);
-    const code = element.data("code");
+    $activeCountry.removeClass("active");
+    $activeCountry.find("#country-content").remove();
+
+    const $element = $(currentTarget);
+    const code = $element.data("code");
     const country = findCountryByCode(code);
 
-    element.addClass("active");
+    $element.addClass("active");
+
+    const $countryElement = createCountryContent(country);
+    $countryElement.addClass("d-lg-none");
+
+    $element.append($countryElement);
 
     renderCountryContent(country);
   };
@@ -133,6 +146,11 @@ $(async () => {
 
       if (isFirstCountry) {
         $element.addClass("active");
+
+        const $countryElement = createCountryContent(country);
+        $countryElement.addClass("d-lg-none");
+
+        $element.append($countryElement);
       }
 
       $countriesList.append($element);
