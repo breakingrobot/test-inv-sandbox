@@ -1,6 +1,6 @@
-/* global $ */
 const API_URL = "https://restcountries.eu/rest/v2";
-const fetchCountries = async (fields = []) => {
+
+export const fetchCountries = async (fields = []) => {
   const persistedCountries = JSON.parse(
     localStorage.getItem("countries") || "[]"
   );
@@ -26,21 +26,3 @@ const fetchCountries = async (fields = []) => {
 
   return countries;
 };
-
-$(async () => {
-  const countries = await fetchCountries();
-
-  countries.forEach((country) => {
-    const { name = "", alpha3Code = "" } = country;
-
-    const $divTemplate = $("#country-template").html();
-    const $countriesList = $("#countries-list");
-
-    const $element = $($divTemplate).clone();
-    const $countryCode = $("<span>").addClass("fw-light fs-6").html(alpha3Code);
-    const $countryName = $("<p>").addClass("fs-3").html(name);
-    $element.append($countryCode);
-    $element.append($countryName);
-    $countriesList.append($element);
-  });
-});
